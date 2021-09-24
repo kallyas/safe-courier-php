@@ -11,8 +11,24 @@ class Parcel extends Model
      * 
      * @var array
      */
+    protected $table = 'parcels';
 
     protected $fillable = [
-        'owner_id', 'status', 'recepient_email'
+        'user_id',
+        'status',
+        'recepient_email',
+        'description',
+        'note',
+        'from_location',
+        'to_location',
+        'weight',
+        'price',
+        'recipient_name',
+        'recipient_phone',
+        'recipient_address',
+        'present_location',
+        'pickup_location',
+        'drop_off_location',
+        'tracking_number'
     ];
 }
