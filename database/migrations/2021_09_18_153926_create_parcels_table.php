@@ -28,7 +28,7 @@ class CreateParcelsTable extends Migration
             // parcel price
             $table->integer('price');
             // parcel owner
-            $table->integer('owner_id');
+            $table->integer('user_id');
             // recipient as object
             $table->string('recipient_name');
             // recipient address
