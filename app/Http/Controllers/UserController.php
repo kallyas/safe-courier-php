@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -19,6 +20,14 @@ class UserController extends Controller
 
     public function createUser(Request $request)
     {
+        $this->validate($request, [
+            'username' => 'required',
+            'email' => 'required|email|unique:users',
+            'firstName' => 'required',
+            'lastName' => 'required',
+            'password' => 'required'
+        ]);
+
         $user = User::create($request->all());
         return response()->json($user, 201);
     }
@@ -34,5 +43,21 @@ class UserController extends Controller
     {
         User::findOrFail($id)->delete();
         return response('Deleted successfully', 200);
+    }
+
+    // function to login a user
+    public function loginUser(Request $request)
+    {
+        $this->validate($request, [
+            'email' => 'required|email',
+            'password' => 'required'
+        ]);
+
+        $user = User::where('email', $request->email)->first();
+        if (Hash::check($request->password, $user->password)) {
+            return response()->json(['user' => $user, 'token' => $user->createToken('MyApp')->accessToken], 200);
+        } else {
+            return response()->json(['error' => 'Unauthorised'], 401);
+        }
     }
 }
