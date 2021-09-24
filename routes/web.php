@@ -27,3 +27,20 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
 
     $router->put('users/{id}', ['uses' => 'UserController@updateUser']);
 });
+
+//parcel routes
+$router->group(['prefix' => 'api/v1'], function () use ($router) {
+    $router->get('parcels', ['uses' => 'ParcelController@showAllParcels']);
+    $router->get('parcels/{id}', ['uses' => 'ParcelController@showOneParcel']);
+    $router->get('parcels/{id}/parcels', ['uses' => 'ParcelController@showParcelsByUser']);
+
+    $router->post('parcels', ['uses' => 'ParcelController@createParcel']);
+
+    $router->delete('parcels', ['uses' => 'ParcelController@deleteParcel']);
+
+    $router->put('parcels/{id}', ['uses' => 'ParcelController@updateParcel']);
+    $router->put('parcels/{id}/status', ['uses' => 'ParcelController@updateParcelStatus']);
+    $router->put('parcels/{id}/destination', ['uses' => 'ParcelController@updateParcelDestination']);
+    $router->put('parcels/{id}/cancel', ['uses' => 'ParcelController@cancelParcel']);
+    $router->put('parcels/{id}/present', ['middleware' => 'role:admin', 'uses' => 'ParcelController@updatePresentLocation']);
+});
