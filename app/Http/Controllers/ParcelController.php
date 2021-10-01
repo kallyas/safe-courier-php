@@ -38,14 +38,14 @@ class ParcelController extends Controller
     public function deleteParcel($id)
     {
         Parcel::findOrFail($id)->delete();
-        return response('Deleted Successfully', 200);
+        return response()->json('Deleted Successfully', 200);
     }
 
-    public function cancelParcel($id)
+    public function cancelParcel(Request $request, $id)
     {
         //set parcel status to cancelled
         $parcel = Parcel::findOrFail($id);
-        $parcel->status = 'cancelled';
+        $parcel->status = $request->status;
         $parcel->save();
         return response()->json($parcel, 200);
     }
