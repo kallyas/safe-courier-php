@@ -23,7 +23,7 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
 
     $router->post('auth/signup', ['uses' => 'UserController@createUser']);
 
-    $router->delete('users', ['uses' => 'UserController@deleteUser']);
+    $router->delete('users/{id}', ['uses' => 'UserController@deleteUser']);
 
     $router->put('users/{id}', ['uses' => 'UserController@updateUser']);
 });
@@ -32,11 +32,11 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
 $router->group(['prefix' => 'api/v1'], function () use ($router) {
     $router->get('parcels', ['uses' => 'ParcelController@showAllParcels']);
     $router->get('parcels/{id}', ['uses' => 'ParcelController@showOneParcel']);
-    $router->get('parcels/{id}/parcels', ['uses' => 'ParcelController@showParcelsByUser']);
+    $router->get('parcels/{id}/parcels', ['uses' => 'ParcelController@showAllParcelsByUser']);
 
     $router->post('parcels', ['uses' => 'ParcelController@createParcel']);
 
-    $router->delete('parcels', ['uses' => 'ParcelController@deleteParcel']);
+    $router->delete('parcels/{id}', ['uses' => 'ParcelController@deleteParcel']);
 
     $router->put('parcels/{id}', ['uses' => 'ParcelController@updateParcel']);
     $router->put('parcels/{id}/status', ['uses' => 'ParcelController@updateParcelStatus']);
