@@ -18,14 +18,18 @@ $router->get('/', function () use ($router) {
 });
 
 $router->group(['prefix' => 'api/v1'], function () use ($router) {
-    $router->get('users', ['uses' => 'UserController@showAllUsers']);
-    $router->get('users/{id}', ['uses' => 'UserController@showOneUser']);
-
     $router->post('auth/signup', ['uses' => 'UserController@createUser']);
+    $router->post('auth/login', ['uses' => 'UserController@loginUser']);
 
     $router->delete('users/{id}', ['uses' => 'UserController@deleteUser']);
 
     $router->put('users/{id}', ['uses' => 'UserController@updateUser']);
+});
+
+// user protected routes
+$router->group(['prefix' => 'api/v1', 'middleware' => 'auth'], function () use ($router) {
+    $router->get('users', ['uses' => 'UserController@showAllUsers']);
+    $router->get('users/{id}', ['uses' => 'UserController@showOneUser']);
 });
 
 //parcel routes

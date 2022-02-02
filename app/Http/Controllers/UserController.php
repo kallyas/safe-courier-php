@@ -28,7 +28,15 @@ class UserController extends Controller
             'password' => 'required'
         ]);
 
-        $user = User::create($request->all());
+        // hash user password 
+        $password = Hash::make($request->input('password'));
+        $user = User::create([
+            'username' => $request->input('username'),
+            'email' => $request->input('email'),
+            'firstName' => $request->input('firstName'),
+            'lastName' => $request->input('lastName'),
+            'password' => $password
+        ]);
         return response()->json($user, 201);
     }
 
@@ -54,8 +62,17 @@ class UserController extends Controller
         ]);
 
         $user = User::where('email', $request->email)->first();
+        if(!$user) {
+            return response()->json([
+                'status' => 'failure',
+                'error' => 'Email does not exist.'
+            ], 401);
+        }
         if (Hash::check($request->password, $user->password)) {
-            return response()->json(['user' => $user, 'token' => $user->createToken('MyApp')->accessToken], 200);
+            $api_token = base64_encode(random_bytes(40));
+            User::where('email', $request->email)->update(['api_key' => $api_token]);
+            return response()->json(['status' => 'sucess', 'api_token' => $api_token], 200);  
+
         } else {
             return response()->json(['error' => 'Unauthorised'], 401);
         }
