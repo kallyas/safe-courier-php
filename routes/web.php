@@ -14,7 +14,23 @@
 */
 
 $router->get('/', function () use ($router) {
-    return $router->app->version();
+    $json_response = [
+        'status' => 'success',
+        'message' => 'Welcome to the Safe-Courier API. (Laravel Version)',
+        'version' => '1.0.0',
+        'author' => 'Kallyas Media <kallyasmedia@gmail.com>',
+        'url' => 'https://api-v4.safe-courier.ml',
+        'other versions' => [
+            'Python' => 'http://api-v3.safe-courier.ml',
+            'NodeJS' => 'http://api.safe-courier.ml',
+        ],
+        'github' => [
+            'python' => 'https://github.com/kallyas/safe-courier-py',
+            'nodejs' => 'https://github.com/kallyas/safe-courier',
+            'laravel' => 'https://github.com/kallyas/safe-courier-php',
+        ]
+    ];
+    return response()->json($json_response, 200);
 });
 
 $router->group(['prefix' => 'api/v1'], function () use ($router) {
@@ -33,7 +49,7 @@ $router->group(['prefix' => 'api/v1', 'middleware' => 'auth'], function () use (
 });
 
 //parcel routes
-$router->group(['prefix' => 'api/v1'], function () use ($router) {
+$router->group(['prefix' => 'api/v1', 'middleware' => 'auth'], function () use ($router) {
     $router->get('parcels', ['uses' => 'ParcelController@showAllParcels']);
     $router->get('parcels/{id}', ['uses' => 'ParcelController@showOneParcel']);
     $router->get('parcels/{id}/parcels', ['uses' => 'ParcelController@showAllParcelsByUser']);
